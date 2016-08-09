@@ -100,10 +100,9 @@ angular.module('textAngularSetup', [])
 	//
 	keyMappings : [],
 	toolbar: [
-		['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'pre', 'quote'],
 		['bold', 'italics', 'underline', 'strikeThrough', 'ul', 'ol', 'redo', 'undo', 'clear'],
 		['justifyLeft','justifyCenter','justifyRight','justifyFull','indent','outdent'],
-		['html', 'insertImage', 'insertLink', 'insertVideo', 'wordcount', 'charcount']
+		['html', 'insertImage', 'insertLink']
 	],
 	classes: {
 		focussed: "focussed",
@@ -325,7 +324,7 @@ angular.module('textAngularSetup', [])
 			container.append(buttonGroup);
 
 			buttonGroup = angular.element('<div class="btn-group" style="padding-right: 6px;">');
-			var floatLeft = angular.element('<button type="button" class="btn btn-default btn-sm btn-small" unselectable="on" tabindex="-1"><i class="fa fa-align-left"></i></button>');
+			var floatLeft = angular.element('<button type="button" class="btn btn-default btn-sm btn-small" unselectable="on" tabindex="-1"><i class="glyphicon glyphicon-align-left"></i></button>');
 			floatLeft.on('click', function(event){
 				event.preventDefault();
 				// webkit
@@ -336,7 +335,7 @@ angular.module('textAngularSetup', [])
 				$element.css('styleFloat', 'left');
 				finishEdit();
 			});
-			var floatRight = angular.element('<button type="button" class="btn btn-default btn-sm btn-small" unselectable="on" tabindex="-1"><i class="fa fa-align-right"></i></button>');
+			var floatRight = angular.element('<button type="button" class="btn btn-default btn-sm btn-small" unselectable="on" tabindex="-1"><i class="glyphicon glyphicon-align-right"></i></button>');
 			floatRight.on('click', function(event){
 				event.preventDefault();
 				// webkit
@@ -347,7 +346,7 @@ angular.module('textAngularSetup', [])
 				$element.css('styleFloat', 'right');
 				finishEdit();
 			});
-			var floatNone = angular.element('<button type="button" class="btn btn-default btn-sm btn-small" unselectable="on" tabindex="-1"><i class="fa fa-align-justify"></i></button>');
+			var floatNone = angular.element('<button type="button" class="btn btn-default btn-sm btn-small" unselectable="on" tabindex="-1"><i class="glyphicon glyphicon-align-justify"></i></button>');
 			floatNone.on('click', function(event){
 				event.preventDefault();
 				// webkit
@@ -364,7 +363,7 @@ angular.module('textAngularSetup', [])
 			container.append(buttonGroup);
 
 			buttonGroup = angular.element('<div class="btn-group">');
-			var remove = angular.element('<button type="button" class="btn btn-default btn-sm btn-small" unselectable="on" tabindex="-1"><i class="fa fa-trash-o"></i></button>');
+			var remove = angular.element('<button type="button" class="btn btn-default btn-sm btn-small" unselectable="on" tabindex="-1"><i class="glyphicon glyphicon-trash"></i></button>');
 			remove.on('click', function(event){
 				event.preventDefault();
 				$element.remove();
@@ -395,7 +394,7 @@ angular.module('textAngularSetup', [])
 			});
 			container.append(link);
 			var buttonGroup = angular.element('<div class="btn-group pull-right">');
-			var reLinkButton = angular.element('<button type="button" class="btn btn-default btn-sm btn-small" tabindex="-1" unselectable="on" title="' + taTranslations.editLink.reLinkButton.tooltip + '"><i class="fa fa-edit icon-edit"></i></button>');
+			var reLinkButton = angular.element('<button type="button" class="btn btn-default btn-sm btn-small" tabindex="-1" unselectable="on" title="' + taTranslations.editLink.reLinkButton.tooltip + '"><i class="glyphicon glyphicon-pencil"></i></button>');
 			reLinkButton.on('click', function(event){
 				event.preventDefault();
 				var urlLink = $window.prompt(taTranslations.insertLink.dialogPrompt, $element.attr('href'));
@@ -445,7 +444,7 @@ angular.module('textAngularSetup', [])
 		throw angular.$$minErr('textAngular')("textAngularSetup", "The textAngular-sanitize provider has been replaced by another -- have you included angular-sanitize by mistake?");
 	}
 	taRegisterTool("html", {
-		iconclass: 'fa fa-code',
+		iconclass: 'flaticon flaticon-code',
 		tooltiptext: taTranslations.html.tooltip,
 		action: function(){
 			this.$editor().switchView();
@@ -488,7 +487,7 @@ angular.module('textAngularSetup', [])
 		activeState: function(){ return this.$editor().queryFormatBlockState('pre'); }
 	});
 	taRegisterTool('ul', {
-		iconclass: 'fa fa-list-ul',
+		iconclass: 'glyphicon glyphicon-list',
 		tooltiptext: taTranslations.ul.tooltip,
 		action: function(){
 			return this.$editor().wrapSelection("insertUnorderedList", null);
@@ -496,7 +495,7 @@ angular.module('textAngularSetup', [])
 		activeState: function(){ return this.$editor().queryCommandState('insertUnorderedList'); }
 	});
 	taRegisterTool('ol', {
-		iconclass: 'fa fa-list-ol',
+		iconclass: 'flaticon flaticon-list-button',
 		tooltiptext: taTranslations.ol.tooltip,
 		action: function(){
 			return this.$editor().wrapSelection("insertOrderedList", null);
@@ -504,7 +503,7 @@ angular.module('textAngularSetup', [])
 		activeState: function(){ return this.$editor().queryCommandState('insertOrderedList'); }
 	});
 	taRegisterTool('quote', {
-		iconclass: 'fa fa-quote-right',
+		iconclass: 'flaticon flaticon-quotations',
 		tooltiptext: taTranslations.quote.tooltip,
 		action: function(){
 			return this.$editor().wrapSelection("formatBlock", "<BLOCKQUOTE>");
@@ -512,21 +511,21 @@ angular.module('textAngularSetup', [])
 		activeState: function(){ return this.$editor().queryFormatBlockState('blockquote'); }
 	});
 	taRegisterTool('undo', {
-		iconclass: 'fa fa-undo',
+		iconclass: 'glyphicon glyphicon-circle-arrow-left',
 		tooltiptext: taTranslations.undo.tooltip,
 		action: function(){
 			return this.$editor().wrapSelection("undo", null);
 		}
 	});
 	taRegisterTool('redo', {
-		iconclass: 'fa fa-repeat',
+		iconclass: 'glyphicon glyphicon-repeat',
 		tooltiptext: taTranslations.redo.tooltip,
 		action: function(){
 			return this.$editor().wrapSelection("redo", null);
 		}
 	});
 	taRegisterTool('bold', {
-		iconclass: 'fa fa-bold',
+		iconclass: 'glyphicon glyphicon-bold',
 		tooltiptext: taTranslations.bold.tooltip,
 		action: function(){
 			return this.$editor().wrapSelection("bold", null);
@@ -537,7 +536,7 @@ angular.module('textAngularSetup', [])
 		commandKeyCode: 98
 	});
 	taRegisterTool('justifyLeft', {
-		iconclass: 'fa fa-align-left',
+		iconclass: 'glyphicon glyphicon-align-left',
 		tooltiptext: taTranslations.justifyLeft.tooltip,
 		action: function(){
 			return this.$editor().wrapSelection("justifyLeft", null);
@@ -560,7 +559,7 @@ angular.module('textAngularSetup', [])
 		}
 	});
 	taRegisterTool('justifyRight', {
-		iconclass: 'fa fa-align-right',
+		iconclass: 'glyphicon glyphicon-align-right',
 		tooltiptext: taTranslations.justifyRight.tooltip,
 		action: function(){
 			return this.$editor().wrapSelection("justifyRight", null);
@@ -575,7 +574,7 @@ angular.module('textAngularSetup', [])
 		}
 	});
 	taRegisterTool('justifyFull', {
-		iconclass: 'fa fa-align-justify',
+		iconclass: 'glyphicon glyphicon-align-justify',
 		tooltiptext: taTranslations.justifyFull.tooltip,
 		action: function(){
 			return this.$editor().wrapSelection("justifyFull", null);
@@ -588,7 +587,7 @@ angular.module('textAngularSetup', [])
 		}
 	});
 	taRegisterTool('justifyCenter', {
-		iconclass: 'fa fa-align-center',
+		iconclass: 'glyphicon glyphicon-align-center',
 		tooltiptext: taTranslations.justifyCenter.tooltip,
 		action: function(){
 			return this.$editor().wrapSelection("justifyCenter", null);
@@ -603,7 +602,7 @@ angular.module('textAngularSetup', [])
 		}
 	});
 	taRegisterTool('indent', {
-		iconclass: 'fa fa-indent',
+		iconclass: 'glyphicon glyphicon-indent-left',
 		tooltiptext: taTranslations.indent.tooltip,
 		action: function(){
 			return this.$editor().wrapSelection("indent", null);
@@ -614,7 +613,7 @@ angular.module('textAngularSetup', [])
 		commandKeyCode: 'TabKey'
 	});
 	taRegisterTool('outdent', {
-		iconclass: 'fa fa-outdent',
+		iconclass: 'glyphicon glyphicon-indent-right',
 		tooltiptext: taTranslations.outdent.tooltip,
 		action: function(){
 			return this.$editor().wrapSelection("outdent", null);
@@ -625,7 +624,7 @@ angular.module('textAngularSetup', [])
 		commandKeyCode: 'ShiftTabKey'
 	});
 	taRegisterTool('italics', {
-		iconclass: 'fa fa-italic',
+		iconclass: 'glyphicon glyphicon-italic',
 		tooltiptext: taTranslations.italic.tooltip,
 		action: function(){
 			return this.$editor().wrapSelection("italic", null);
@@ -636,7 +635,7 @@ angular.module('textAngularSetup', [])
 		commandKeyCode: 105
 	});
 	taRegisterTool('underline', {
-		iconclass: 'fa fa-underline',
+		iconclass: 'flaticon flaticon-underline',
 		tooltiptext: taTranslations.underline.tooltip,
 		action: function(){
 			return this.$editor().wrapSelection("underline", null);
@@ -647,7 +646,7 @@ angular.module('textAngularSetup', [])
 		commandKeyCode: 117
 	});
 	taRegisterTool('strikeThrough', {
-		iconclass: 'fa fa-strikethrough',
+		iconclass: 'flaticon flaticon-strikethrough',
 		tooltiptext: taTranslations.strikeThrough.tooltip,
 		action: function(){
 			return this.$editor().wrapSelection("strikeThrough", null);
@@ -657,7 +656,7 @@ angular.module('textAngularSetup', [])
 		}
 	});
 	taRegisterTool('clear', {
-		iconclass: 'fa fa-ban',
+		iconclass: 'glyphicon glyphicon-ban-circle',
 		tooltiptext: taTranslations.clear.tooltip,
 		action: function(deferred, restoreSelection){
 			var i;
@@ -711,10 +710,7 @@ angular.module('textAngularSetup', [])
 			var $editor = this.$editor();
 			var recursiveRemoveClass = function(node){
 				node = angular.element(node);
-				/* istanbul ignore next: this is not triggered in tests any longer since we now never select the whole displayELement */
-				if(node[0] !== $editor.displayElements.text[0]) {
-					node.removeAttr('class');
-				}
+				if(node[0] !== $editor.displayElements.text[0]) node.removeAttr('class');
 				angular.forEach(node.children(), recursiveRemoveClass);
 			};
 			angular.forEach(possibleNodes, recursiveRemoveClass);
@@ -726,41 +722,15 @@ angular.module('textAngularSetup', [])
 		}
 	});
 
-	/* istanbul ignore next: if it's javascript don't worry - though probably should show some kind of error message */
-	var blockJavascript = function (link) {
-		if (link.toLowerCase().indexOf('javascript')!==-1) {
-			return true;
-		}
-		return false;
-	};
 
 	taRegisterTool('insertImage', {
-		iconclass: 'fa fa-picture-o',
+		iconclass: 'glyphicon glyphicon-picture',
 		tooltiptext: taTranslations.insertImage.tooltip,
 		action: function(){
 			var imageLink;
 			imageLink = $window.prompt(taTranslations.insertImage.dialogPrompt, 'http://');
 			if(imageLink && imageLink !== '' && imageLink !== 'http://'){
-				/* istanbul ignore next: don't know how to test this... since it needs a dialogPrompt */
-				// block javascript here
-				if (!blockJavascript(imageLink)) {
-					if (taSelection.getSelectionElement().tagName.toLowerCase() === 'a') {
-						// due to differences in implementation between FireFox and Chrome, we must move the
-						// insertion point past the <a> element, otherwise FireFox inserts inside the <a>
-						// With this change, both FireFox and Chrome behave the same way!
-						taSelection.setSelectionAfterElement(taSelection.getSelectionElement());
-					}
-					// In the past we used the simple statement:
-					//return this.$editor().wrapSelection('insertImage', imageLink, true);
-					//
-					// However on Firefox only, when the content is empty this is a problem
-					// See Issue #1201
-					// Investigation reveals that Firefox only inserts a <p> only!!!!
-					// So now we use insertHTML here and all is fine.
-					// NOTE: this is what 'insertImage' is supposed to do anyway!
-					var embed = '<img src="' + imageLink + '">';
-					return this.$editor().wrapSelection('insertHTML', embed, true);
-				}
+				return this.$editor().wrapSelection('insertImage', imageLink, true);
 			}
 		},
 		onElementSelect: {
@@ -774,32 +744,20 @@ angular.module('textAngularSetup', [])
 		action: function(){
 			var urlPrompt;
 			urlPrompt = $window.prompt(taTranslations.insertVideo.dialogPrompt, 'https://');
-			// block javascript here
-			/* istanbul ignore else: if it's javascript don't worry - though probably should show some kind of error message */
-			if (!blockJavascript(urlPrompt)) {
+			if (urlPrompt && urlPrompt !== '' && urlPrompt !== 'https://') {
 
-				if (urlPrompt && urlPrompt !== '' && urlPrompt !== 'https://') {
+				videoId = taToolFunctions.extractYoutubeVideoId(urlPrompt);
 
-					videoId = taToolFunctions.extractYoutubeVideoId(urlPrompt);
-
-					/* istanbul ignore else: if it's invalid don't worry - though probably should show some kind of error message */
-					if (videoId) {
-						// create the embed link
-						var urlLink = "https://www.youtube.com/embed/" + videoId;
-						// create the HTML
-						// for all options see: http://stackoverflow.com/questions/2068344/how-do-i-get-a-youtube-video-thumbnail-from-the-youtube-api
-						// maxresdefault.jpg seems to be undefined on some.
-						var embed = '<img class="ta-insert-video" src="https://img.youtube.com/vi/' + videoId + '/hqdefault.jpg" ta-insert-video="' + urlLink + '" contenteditable="false" allowfullscreen="true" frameborder="0" />';
-						/* istanbul ignore next: don't know how to test this... since it needs a dialogPrompt */
-						if (taSelection.getSelectionElement().tagName.toLowerCase() === 'a') {
-							// due to differences in implementation between FireFox and Chrome, we must move the
-							// insertion point past the <a> element, otherwise FireFox inserts inside the <a>
-							// With this change, both FireFox and Chrome behave the same way!
-							taSelection.setSelectionAfterElement(taSelection.getSelectionElement());
-						}
-						// insert
-						return this.$editor().wrapSelection('insertHTML', embed, true);
-					}
+				/* istanbul ignore else: if it's invalid don't worry - though probably should show some kind of error message */
+				if(videoId){
+					// create the embed link
+					var urlLink = "https://www.youtube.com/embed/" + videoId;
+					// create the HTML
+					// for all options see: http://stackoverflow.com/questions/2068344/how-do-i-get-a-youtube-video-thumbnail-from-the-youtube-api
+					// maxresdefault.jpg seems to be undefined on some.
+					var embed = '<img class="ta-insert-video" src="https://img.youtube.com/vi/' + videoId + '/hqdefault.jpg" ta-insert-video="' + urlLink + '" contenteditable="false" allowfullscreen="true" frameborder="0" />';
+					// insert
+					return this.$editor().wrapSelection('insertHTML', embed, true);
 				}
 			}
 		},
@@ -811,16 +769,12 @@ angular.module('textAngularSetup', [])
 	});
 	taRegisterTool('insertLink', {
 		tooltiptext: taTranslations.insertLink.tooltip,
-		iconclass: 'fa fa-link',
+		iconclass: 'glyphicon glyphicon-link',
 		action: function(){
 			var urlLink;
 			urlLink = $window.prompt(taTranslations.insertLink.dialogPrompt, 'http://');
 			if(urlLink && urlLink !== '' && urlLink !== 'http://'){
-				// block javascript here
-				/* istanbul ignore else: if it's javascript don't worry - though probably should show some kind of error message */
-				if (!blockJavascript(urlLink)) {
-					return this.$editor().wrapSelection('createLink', urlLink, true);
-				}
+				return this.$editor().wrapSelection('createLink', urlLink, true);
 			}
 		},
 		activeState: function(commonElement){

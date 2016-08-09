@@ -1,27 +1,28 @@
 angular.module('textAngular.taBind', ['textAngular.factories', 'textAngular.DOM'])
 .service('_taBlankTest', [function(){
+	var INLINETAGS_NONBLANK = /<(a|abbr|acronym|bdi|bdo|big|cite|code|del|dfn|img|ins|kbd|label|map|mark|q|ruby|rp|rt|s|samp|time|tt|var)[^>]*(>|$)/i;
 	return function(_defaultTest){
 		return function(_blankVal){
-			// we radically restructure this code.
-			// what was here before was incredibly fragile.
-			// What we do now is to check that the html is non-blank visually
-			// which we check by looking at html->text
 			if(!_blankVal) return true;
 			// find first non-tag match - ie start of string or after tag that is not whitespace
-			// var t0 = performance.now();
-			// Takes a small fraction of a mSec to do this...
-			var _text_ = stripHtmlToText(_blankVal);
-			// var t1 = performance.now();
-			// console.log('Took', (t1 - t0).toFixed(4), 'milliseconds to generate:');
-			if (_text_=== '') {
-				// img generates a visible item so it is not blank!
-				if (/<img[^>]+>/.test(_blankVal)) {
-					return false;
-				}
-				return true;
-			} else {
-				return false;
+			var _firstMatch = /(^[^<]|>)[^<]/i.exec(_blankVal);
+			var _firstTagIndex;
+			if(!_firstMatch){
+				// find the end of the first tag removing all the
+				// Don't do a global replace as that would be waaayy too long, just replace the first 4 occurences should be enough
+				_blankVal = _blankVal.toString().replace(/="[^"]*"/i, '').replace(/="[^"]*"/i, '').replace(/="[^"]*"/i, '').replace(/="[^"]*"/i, '');
+				_firstTagIndex = _blankVal.indexOf('>');
+			}else{
+				_firstTagIndex = _firstMatch.index;
 			}
+			_blankVal = _blankVal.trim().substring(_firstTagIndex, _firstTagIndex + 100);
+			// check for no tags entry
+			if(/^[^<>]+$/i.test(_blankVal)) return false;
+			// this regex is to match any number of whitespace only between two tags
+			if (_blankVal.length === 0 || _blankVal === _defaultTest || /^>(\s|&nbsp;)*<\/[^>]+>$/ig.test(_blankVal)) return true;
+			// this regex tests if there is a tag followed by some optional whitespace and some text after that
+			else if (/>\s*[^\s<]/i.test(_blankVal) || INLINETAGS_NONBLANK.test(_blankVal)) return false;
+			else return true;
 		};
 	};
 }])
@@ -188,7 +189,7 @@ angular.module('textAngular.taBind', ['textAngular.factories', 'textAngular.DOM'
 						for(i = 0; i < _children.length; i++){
 							var node = _children[i];
 							var nodeName = node.nodeName.toLowerCase();
-							//console.log('node#:', i, 'name:', nodeName);
+							//console.log(nodeName);
 							if(nodeName === '#comment') {
 								value += '<!--' + node.nodeValue + '-->';
 							} else if(nodeName === '#text') {
@@ -212,7 +213,6 @@ angular.module('textAngular.taBind', ['textAngular.factories', 'textAngular.DOM'
 							} else {
 								value += node.outerHTML;
 							}
-							//console.log(value);
 						}
 					}
 				}
@@ -220,9 +220,7 @@ angular.module('textAngular.taBind', ['textAngular.factories', 'textAngular.DOM'
 				return value;
 			};
 
-			if(attrs.taPaste) {
-				_pasteHandler = $parse(attrs.taPaste);
-			}
+			if(attrs.taPaste) _pasteHandler = $parse(attrs.taPaste);
 
 			element.addClass('ta-bind');
 
@@ -298,12 +296,8 @@ angular.module('textAngular.taBind', ['textAngular.factories', 'textAngular.DOM'
 
 			// in here we are undoing the converts used elsewhere to prevent the < > and & being displayed when they shouldn't in the code.
 			var _compileHtml = function(){
-				if(_isContentEditable) {
-					return element[0].innerHTML;
-				}
-				if(_isInputFriendly) {
-					return element.val();
-				}
+				if(_isContentEditable) return element[0].innerHTML;
+				if(_isInputFriendly) return element.val();
 				throw ('textAngular Error: attempting to update non-editable taBind');
 			};
 
@@ -498,7 +492,7 @@ angular.module('textAngular.taBind', ['textAngular.factories', 'textAngular.DOM'
 					var _processingPaste = false;
 					/* istanbul ignore next: phantom js cannot test this for some reason */
 					var processpaste = function(text) {
-                       var _isOneNote = text!==undefined? text.match(/content=["']*OneNote.File/i): false;
+                        var _isOneNote = text.match(/content=["']*OneNote.File/i);
 						/* istanbul ignore else: don't care if nothing pasted */
                         //console.log(text);
 						if(text && text.trim().length){
@@ -832,6 +826,14 @@ angular.module('textAngular.taBind', ['textAngular.factories', 'textAngular.DOM'
 							if(_defaultVal !== '' && val.trim() === ''){
 								_setInnerHTML(_defaultVal);
 								taSelection.setSelectionToElementStart(element.children()[0]);
+							}else if(val.substring(0, 1) !== '<' && attrs.taDefaultWrap !== ''){
+								/* we no longer do this, since there can be comments here and white space
+								var _savedSelection = rangy.saveSelection();
+								val = _compileHtml();
+								val = "<" + attrs.taDefaultWrap + ">" + val + "</" + attrs.taDefaultWrap + ">";
+								_setInnerHTML(val);
+								rangy.restoreSelection(_savedSelection);
+								*/
 							}
 							var triggerUndo = _lastKey !== event.keyCode && UNDO_TRIGGER_KEYS.test(event.keyCode);
 							if(_keyupTimeout) $timeout.cancel(_keyupTimeout);
@@ -1050,6 +1052,12 @@ angular.module('textAngular.taBind', ['textAngular.factories', 'textAngular.DOM'
 					element.find(selector).on('click', selectorClickHandler);
 				});
 				element.on('drop', fileDropHandler);
+				element.on('blur', function(){
+					/* istanbul ignore next: webkit fix */
+					if(_browserDetect.webkit) { // detect webkit
+						globalContentEditableBlur = true;
+					}
+				});
 			}
 		}
 	};
